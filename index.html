@@ -3,176 +3,267 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Consulta Ponto</title>
+<title>Consulta de Jornada</title>
 
 <style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
 body{
-    font-family: Arial, sans-serif;
-    background:#0f172a;
-    margin:0;
-    padding:20px;
+  font-family:Segoe UI,Arial,sans-serif;
+  background:#0f172a;
+  min-height:100vh;
+  padding:20px;
 }
 
 .container{
-    max-width:500px;
-    margin:auto;
-    background:white;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 10px 25px rgba(0,0,0,.3);
+  max-width:520px;
+  margin:auto;
+  background:#fff;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 15px 40px rgba(0,0,0,.35);
 }
 
 .header{
-    background:linear-gradient(90deg,#1d4ed8,#06b6d4);
-    color:white;
-    padding:20px;
+  padding:24px;
+  background:linear-gradient(135deg,#1d4ed8,#06b6d4);
+  color:white;
+  text-align:center;
 }
 
 .header h1{
-    margin:0;
+  font-size:30px;
+}
+
+.header p{
+  margin-top:8px;
+  opacity:.9;
 }
 
 .content{
-    padding:20px;
+  padding:24px;
 }
 
 label{
-    display:block;
-    margin-bottom:8px;
-    font-weight:bold;
+  display:block;
+  margin-bottom:8px;
+  font-weight:700;
+  color:#334155;
 }
 
 input{
-    width:100%;
-    padding:12px;
-    margin-bottom:20px;
-    box-sizing:border-box;
-    border:2px solid #cbd5e1;
-    border-radius:10px;
-    font-size:16px;
+  width:100%;
+  padding:14px;
+  margin-bottom:16px;
+  border-radius:12px;
+  border:2px solid #cbd5e1;
+  font-size:16px;
 }
 
 button{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-bottom:10px;
+  width:100%;
+  border:none;
+  border-radius:12px;
+  padding:14px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
 }
 
-.btn{
-    background:#16a34a;
-    color:white;
+.calcular{
+  background:#16a34a;
+  color:white;
 }
 
-.btn-clear{
-    background:#e2e8f0;
+.limpar{
+  margin-top:10px;
+  background:#e2e8f0;
 }
 
 .card{
-    margin-top:12px;
-    padding:15px;
-    border-radius:12px;
-    color:white;
+  margin-top:15px;
+  color:white;
+  padding:18px;
+  border-radius:16px;
 }
 
-.green{background:#22c55e;}
-.blue{background:#2563eb;}
-.orange{background:#f59e0b;}
-.red{background:#ef4444;}
-
-.result{
-    font-size:32px;
-    font-weight:bold;
+.normal{
+  background:#22c55e;
 }
+
+.he{
+  background:#2563eb;
+}
+
+.total{
+  background:#f59e0b;
+}
+
+.excesso{
+  background:#ef4444;
+}
+
+.valor{
+  font-size:36px;
+  font-weight:800;
+  margin-top:6px;
+}
+
+.info{
+  margin-top:6px;
+  opacity:.9;
+}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#64748b;
+  font-size:12px;
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>⏱️ Consulta Ponto</h1>
-        <p>Consulta rápida de jornada</p>
-    </div>
 
-    <div class="content">
+  <div class="header">
+    <h1>⏱️ Consulta de Jornada</h1>
+    <p>Cálculo automático de saída</p>
+  </div>
 
-        <label>Entrada</label>
-        <input type="time" id="entrada" value="07:30">
+  <div class="content">
 
-        <label>Intervalo</label>
-        <input type="time" id="intervalo" value="01:00">
+    <label>Entrada</label>
+    <input type="time" id="entrada" value="07:30">
 
-        <button class="btn" onclick="calcular()">CALCULAR SAÍDA</button>
+    <label>Saída para almoço</label>
+    <input type="time" id="saidaAlmoco" value="12:00">
 
-        <button class="btn-clear" onclick="limpar()">Limpar dados</button>
+    <label>Retorno do almoço</label>
+    <input type="time" id="retornoAlmoco" value="13:00">
 
-        <div id="resultado"></div>
+    <button class="calcular" onclick="calcular()">
+      CALCULAR SAÍDA
+    </button>
 
-    </div>
+    <button class="limpar" onclick="limpar()">
+      Limpar Dados
+    </button>
+
+    <div id="resultado"></div>
+
+  </div>
+
+  <footer>
+    Consulta Ponto • Versão 2.0
+  </footer>
+
 </div>
 
 <script>
+
 function paraMinutos(hora){
-    const partes = hora.split(':');
-    return parseInt(partes[0])*60 + parseInt(partes[1]);
+  const [h,m]=hora.split(':').map(Number);
+  return h*60+m;
 }
 
 function paraHora(min){
-    min = ((min % 1440) + 1440) % 1440;
-    const h = String(Math.floor(min/60)).padStart(2,'0');
-    const m = String(min%60).padStart(2,'0');
-    return h + ':' + m;
+  min=((min%1440)+1440)%1440;
+
+  const h=Math.floor(min/60)
+  .toString()
+  .padStart(2,'0');
+
+  const m=(min%60)
+  .toString()
+  .padStart(2,'0');
+
+  return `${h}:${m}`;
 }
 
 function calcular(){
 
-    const jornada = 504;
-    const intervaloPadrao = 60;
-    const heMax = 96;
+  const jornada=504;
+  const intervaloPadrao=60;
+  const heMax=96;
 
-    const entrada = paraMinutos(document.getElementById('entrada').value);
-    const intervalo = paraMinutos(document.getElementById('intervalo').value);
+  const entrada=
+    paraMinutos(
+      document.getElementById('entrada').value
+    );
 
-    const excesso = Math.max(0, intervalo - intervaloPadrao);
+  const saidaAlmoco=
+    paraMinutos(
+      document.getElementById('saidaAlmoco').value
+    );
 
-    const normal = entrada + jornada + intervaloPadrao;
-    const he = normal + heMax;
-    const heIntervalo = he + excesso;
+  const retornoAlmoco=
+    paraMinutos(
+      document.getElementById('retornoAlmoco').value
+    );
 
-    document.getElementById('resultado').innerHTML = `
-        <div class="card green">
-            <small>Saída Normal</small>
-            <div class="result">${paraHora(normal)}</div>
-        </div>
+  const intervalo=
+    retornoAlmoco-saidaAlmoco;
 
-        <div class="card blue">
-            <small>Saída com HE Máxima</small>
-            <div class="result">${paraHora(he)}</div>
-        </div>
+  const excesso=
+    Math.max(
+      0,
+      intervalo-intervaloPadrao
+    );
 
-        <div class="card orange">
-            <small>HE + Excesso Intervalo</small>
-            <div class="result">${paraHora(heIntervalo)}</div>
-        </div>
+  const normal=
+    entrada+jornada+intervaloPadrao;
 
-        ${excesso > 0 ? `
-        <div class="card red">
-            <small>Excesso de intervalo</small>
-            <div class="result">${excesso} min</div>
-        </div>` : ''}
-    `;
+  const he=
+    normal+heMax;
+
+  const heIntervalo=
+    he+excesso;
+
+  document.getElementById('resultado')
+  .innerHTML=`
+  
+  <div class="card normal">
+    <div>✅ Saída Normal</div>
+    <div class="valor">${paraHora(normal)}</div>
+  </div>
+
+  <div class="card he">
+    <div>🔵 HE Máxima</div>
+    <div class="valor">${paraHora(he)}</div>
+  </div>
+
+  <div class="card total">
+    <div>🟠 HE + Excesso</div>
+    <div class="valor">${paraHora(heIntervalo)}</div>
+  </div>
+
+  <div class="card excesso">
+    <div>⏳ Intervalo Real</div>
+    <div class="valor">${intervalo} min</div>
+    <div class="info">Excesso: ${excesso} min</div>
+  </div>
+
+  `;
 }
 
 function limpar(){
-    document.getElementById('entrada').value='07:30';
-    document.getElementById('intervalo').value='01:00';
-    document.getElementById('resultado').innerHTML='';
+
+  document.getElementById('entrada').value='07:30';
+  document.getElementById('saidaAlmoco').value='12:00';
+  document.getElementById('retornoAlmoco').value='13:00';
+
+  document.getElementById('resultado')
+  .innerHTML='';
 }
+
 </script>
 
 </body>

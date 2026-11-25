@@ -8,122 +8,129 @@
 <style>
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-  font-family:Segoe UI,Arial,sans-serif;
-  background:#0f172a;
-  min-height:100vh;
-  padding:20px;
+    font-family:Segoe UI, Arial, sans-serif;
+    background:#0f172a;
+    min-height:100vh;
+    padding:20px;
 }
 
 .container{
-  max-width:520px;
-  margin:auto;
-  background:#fff;
-  border-radius:24px;
-  overflow:hidden;
-  box-shadow:0 15px 40px rgba(0,0,0,.35);
+    max-width:520px;
+    margin:auto;
+    background:white;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
 }
 
 .header{
-  padding:24px;
-  background:linear-gradient(135deg,#1d4ed8,#06b6d4);
-  color:white;
-  text-align:center;
+    background:linear-gradient(135deg,#2563eb,#06b6d4);
+    color:white;
+    padding:24px;
+    text-align:center;
 }
 
 .header h1{
-  font-size:30px;
+    font-size:30px;
+    margin-bottom:8px;
 }
 
 .header p{
-  margin-top:8px;
-  opacity:.9;
+    opacity:.95;
 }
 
 .content{
-  padding:24px;
+    padding:24px;
 }
 
 label{
-  display:block;
-  margin-bottom:8px;
-  font-weight:700;
-  color:#334155;
+    display:block;
+    margin-bottom:8px;
+    color:#334155;
+    font-weight:700;
+    font-size:18px;
 }
 
 input{
-  width:100%;
-  padding:14px;
-  margin-bottom:16px;
-  border-radius:12px;
-  border:2px solid #cbd5e1;
-  font-size:16px;
+    width:100%;
+    padding:14px;
+    margin-bottom:18px;
+    border:2px solid #cbd5e1;
+    border-radius:14px;
+    font-size:18px;
 }
 
 button{
-  width:100%;
-  border:none;
-  border-radius:12px;
-  padding:14px;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
+    width:100%;
+    border:none;
+    border-radius:14px;
+    padding:14px;
+    font-size:20px;
+    font-weight:700;
+    cursor:pointer;
 }
 
-.calcular{
-  background:#16a34a;
-  color:white;
+.btn-calcular{
+    background:#16a34a;
+    color:white;
 }
 
-.limpar{
-  margin-top:10px;
-  background:#e2e8f0;
+.btn-limpar{
+    margin-top:10px;
+    background:#e2e8f0;
 }
 
 .card{
-  margin-top:15px;
-  color:white;
-  padding:18px;
-  border-radius:16px;
+    margin-top:18px;
+    color:white;
+    padding:20px;
+    border-radius:18px;
 }
 
 .normal{
-  background:#22c55e;
+    background:#22c55e;
 }
 
 .he{
-  background:#2563eb;
+    background:#2563eb;
 }
 
 .total{
-  background:#f59e0b;
+    background:#f59e0b;
 }
 
-.excesso{
-  background:#ef4444;
+.intervalo{
+    background:#ef4444;
+}
+
+.titulo{
+    font-size:22px;
+    font-weight:700;
 }
 
 .valor{
-  font-size:36px;
-  font-weight:800;
-  margin-top:6px;
+    font-size:52px;
+    font-weight:800;
+    margin-top:12px;
 }
 
-.info{
-  margin-top:6px;
-  opacity:.9;
+.obs{
+    margin-top:8px;
+    font-size:14px;
+    opacity:.95;
 }
 
 footer{
-  text-align:center;
-  padding:20px;
-  color:#64748b;
-  font-size:12px;
+    text-align:center;
+    padding:20px;
+    color:#64748b;
+    font-size:12px;
 }
 
 </style>
@@ -133,135 +140,203 @@ footer{
 
 <div class="container">
 
-  <div class="header">
-    <h1>⏱️ Consulta de Jornada</h1>
-    <p>Cálculo automático de saída</p>
-  </div>
+    <div class="header">
+        <h1>⏱️ Consulta de Jornada</h1>
+        <p>Cálculo automático de saída</p>
+    </div>
 
-  <div class="content">
+    <div class="content">
 
-    <label>Entrada</label>
-    <input type="time" id="entrada" value="07:30">
+        <label>Entrada</label>
+        <input
+            type="time"
+            id="entrada"
+            value="07:00"
+        >
 
-    <label>Saída para almoço</label>
-    <input type="time" id="saidaAlmoco" value="12:00">
+        <label>Saída para almoço</label>
+        <input
+            type="time"
+            id="saidaAlmoco"
+            value="12:00"
+        >
 
-    <label>Retorno do almoço</label>
-    <input type="time" id="retornoAlmoco" value="13:00">
+        <label>Retorno do almoço</label>
+        <input
+            type="time"
+            id="retornoAlmoco"
+            value="13:00"
+        >
 
-    <button class="calcular" onclick="calcular()">
-      CALCULAR SAÍDA
-    </button>
+        <button
+            class="btn-calcular"
+            onclick="calcular()">
+            CALCULAR SAÍDA
+        </button>
 
-    <button class="limpar" onclick="limpar()">
-      Limpar Dados
-    </button>
+        <button
+            class="btn-limpar"
+            onclick="limpar()">
+            Limpar Dados
+        </button>
 
-    <div id="resultado"></div>
+        <div id="resultado"></div>
 
-  </div>
+    </div>
 
-  <footer>
-    Consulta Ponto • Versão 2.0
-  </footer>
+    <footer>
+        Consulta de Jornada • Versão 2.3
+    </footer>
 
 </div>
 
 <script>
 
 function paraMinutos(hora){
-  const [h,m]=hora.split(':').map(Number);
-  return h*60+m;
+    const [h,m] = hora.split(':').map(Number);
+    return h * 60 + m;
 }
 
 function paraHora(min){
-  min=((min%1440)+1440)%1440;
 
-  const h=Math.floor(min/60)
-  .toString()
-  .padStart(2,'0');
+    min = ((min % 1440) + 1440) % 1440;
 
-  const m=(min%60)
-  .toString()
-  .padStart(2,'0');
+    const h = Math.floor(min / 60)
+        .toString()
+        .padStart(2,'0');
 
-  return `${h}:${m}`;
+    const m = (min % 60)
+        .toString()
+        .padStart(2,'0');
+
+    return `${h}:${m}`;
 }
 
 function calcular(){
 
-  const jornada=504;
-  const intervaloPadrao=60;
-  const heMax=96;
+    const jornada = 504;      // 8h24
+    const intervaloPadrao = 60;
+    const heMax = 96;         // 1h36
 
-  const entrada=
-    paraMinutos(
-      document.getElementById('entrada').value
-    );
+    const entrada =
+        paraMinutos(
+            document.getElementById('entrada').value
+        );
 
-  const saidaAlmoco=
-    paraMinutos(
-      document.getElementById('saidaAlmoco').value
-    );
+    const saidaAlmoco =
+        paraMinutos(
+            document.getElementById('saidaAlmoco').value
+        );
 
-  const retornoAlmoco=
-    paraMinutos(
-      document.getElementById('retornoAlmoco').value
-    );
+    const retornoAlmoco =
+        paraMinutos(
+            document.getElementById('retornoAlmoco').value
+        );
 
-  const intervalo=
-    retornoAlmoco-saidaAlmoco;
+    const intervalo =
+        retornoAlmoco - saidaAlmoco;
 
-  const excesso=
-    Math.max(
-      0,
-      intervalo-intervaloPadrao
-    );
+    const excesso =
+        Math.max(
+            0,
+            intervalo - intervaloPadrao
+        );
 
-  const normal=
-    entrada+jornada+intervaloPadrao;
+    /* Excesso incorporado na saída normal */
 
-  const he=
-    normal+heMax;
+    const normal =
+        entrada +
+        jornada +
+        intervaloPadrao +
+        excesso;
 
-  const heIntervalo=
-    he+excesso;
+    const he =
+        normal +
+        heMax;
 
-  document.getElementById('resultado')
-  .innerHTML=`
-  
-  <div class="card normal">
-    <div>✅ Saída Normal</div>
-    <div class="valor">${paraHora(normal)}</div>
-  </div>
+    const heIntervalo =
+        he +
+        excesso;
 
-  <div class="card he">
-    <div>🔵 HE Máxima</div>
-    <div class="valor">${paraHora(he)}</div>
-  </div>
+    document.getElementById('resultado').innerHTML = `
 
-  <div class="card total">
-    <div>🟠 HE + Excesso</div>
-    <div class="valor">${paraHora(heIntervalo)}</div>
-  </div>
+        <div class="card normal">
 
-  <div class="card excesso">
-    <div>⏳ Intervalo Real</div>
-    <div class="valor">${intervalo} min</div>
-    <div class="info">Excesso: ${excesso} min</div>
-  </div>
+            <div class="titulo">
+                ✅ Saída Normal
+            </div>
 
-  `;
+            <div class="valor">
+                ${paraHora(normal)}
+            </div>
+
+            ${
+                excesso > 0
+                ? `<div class="obs">
+                     Incluído excesso de ${excesso} min no cálculo.
+                   </div>`
+                : ''
+            }
+
+        </div>
+
+        <div class="card he">
+
+            <div class="titulo">
+                🔵 HE Máxima
+            </div>
+
+            <div class="valor">
+                ${paraHora(he)}
+            </div>
+
+        </div>
+
+        <div class="card total">
+
+            <div class="titulo">
+                🟠 HE + Excesso
+            </div>
+
+            <div class="valor">
+                ${paraHora(heIntervalo)}
+            </div>
+
+        </div>
+
+        <div class="card intervalo">
+
+            <div class="titulo">
+                ⏳ Intervalo Real
+            </div>
+
+            <div class="valor">
+                ${intervalo} min
+            </div>
+
+            <div class="obs">
+                Excesso: ${excesso} min
+            </div>
+
+        </div>
+
+    `;
 }
 
 function limpar(){
 
-  document.getElementById('entrada').value='07:30';
-  document.getElementById('saidaAlmoco').value='12:00';
-  document.getElementById('retornoAlmoco').value='13:00';
+    document.getElementById('entrada').value =
+        '07:00';
 
-  document.getElementById('resultado')
-  .innerHTML='';
+    document.getElementById('saidaAlmoco').value =
+        '12:00';
+
+    document.getElementById('retornoAlmoco').value =
+        '13:00';
+
+    document.getElementById('resultado').innerHTML =
+        '';
+
 }
 
 </script>

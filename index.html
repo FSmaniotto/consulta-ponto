@@ -1,3 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consulta de Jornada</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Segoe UI, Arial, sans-serif;
+    background:#0f172a;
+    min-height:100vh;
+    padding:20px;
+}
+
+.container{
+    max-width:520px;
+    margin:auto;
+    background:white;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+.header{
+    background:linear-gradient(135deg,#2563eb,#06b6d4);
+    color:white;
+    padding:24px;
+    text-align:center;
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.header p{
+    opacity:.95;
+}
+
+.content{
+    padding:24px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    color:#334155;
+    font-weight:700;
+    font-size:18px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin-bottom:18px;
+    border:2px solid #cbd5e1;
+    border-radius:14px;
+    font-size:18px;
+}
+
+button{
+    width:100%;
+    border:none;
+    border-radius:14px;
+    padding:14px;
+    font-size:20px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.btn-calcular{
+    background:#16a34a;
+    color:white;
+}
+
+.btn-limpar{
+    margin-top:10px;
+    background:#e2e8f0;
+}
+
+.card{
+    margin-top:18px;
+    color:white;
+    padding:20px;
+    border-radius:18px;
+}
+
+.normal{
+    background:#22c55e;
+}
+
+.he{
+    background:#2563eb;
+}
+
+.total{
+    background:#f59e0b;
+}
+
+.intervalo{
+    background:#ef4444;
+}
+
+.titulo{
+    font-size:22px;
+    font-weight:700;
+}
+
+.valor{
+    font-size:52px;
+    font-weight:800;
+    margin-top:12px;
+}
+
+.obs{
+    margin-top:8px;
+    font-size:14px;
+    opacity:.95;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    color:#64748b;
+    font-size:12px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>⏱️ Consulta de Jornada</h1>
+        <p>Cálculo automático de saída</p>
+    </div>
+
+    <div class="content">
+
+        <label>Entrada</label>
+        <input type="time" id="entrada" value="07:00">
+
+        <label>Saída para almoço</label>
+        <input type="time" id="saidaAlmoco" value="12:00">
+
+        <label>Retorno do almoço</label>
+        <input type="time" id="retornoAlmoco" value="13:00">
+
+        <button class="btn-calcular" onclick="calcular()">
+            CALCULAR SAÍDA
+        </button>
+
+        <button class="btn-limpar" onclick="limpar()">
+            Limpar Dados
+        </button>
+
+        <div id="resultado"></div>
+
+    </div>
+
+    <footer>
+        Consulta de Jornada • Versão 2.3
+    </footer>
+
+</div>
+
 <script>
 
 function paraMinutos(hora){
@@ -66,7 +240,6 @@ function calcular(){
     document.getElementById('resultado').innerHTML = `
 
         <div class="card normal">
-
             <div class="titulo">
                 ✅ Saída Normal
             </div>
@@ -80,11 +253,9 @@ function calcular(){
                     Incluído excesso de ${excesso} min no cálculo.
                 </div>
             ` : ''}
-
         </div>
 
         <div class="card he">
-
             <div class="titulo">
                 🔵 HE Máxima
             </div>
@@ -92,11 +263,9 @@ function calcular(){
             <div class="valor">
                 ${paraHora(he)}
             </div>
-
         </div>
 
         <div class="card total">
-
             <div class="titulo">
                 🟠 HE + Excesso
             </div>
@@ -104,11 +273,9 @@ function calcular(){
             <div class="valor">
                 ${paraHora(heIntervalo)}
             </div>
-
         </div>
 
         <div class="card intervalo">
-
             <div class="titulo">
                 ⏳ Intervalo Real
             </div>
@@ -120,23 +287,21 @@ function calcular(){
             <div class="obs">
                 Excesso: ${excesso} min
             </div>
-
         </div>
 
     `;
-
 }
 
 function limpar(){
 
     document.getElementById('entrada').value = '07:00';
-
     document.getElementById('saidaAlmoco').value = '12:00';
-
     document.getElementById('retornoAlmoco').value = '13:00';
-
     document.getElementById('resultado').innerHTML = '';
 
 }
 
 </script>
+
+</body>
+</html>

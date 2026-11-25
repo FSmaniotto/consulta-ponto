@@ -154,6 +154,15 @@ footer{
         <label>Retorno do almoço</label>
         <input type="time" id="retornoAlmoco" value="13:00">
 
+        <label>Hora Extra Desejada</label>
+        <input
+            type="time"
+            id="heDesejada"
+            value="00:00"
+            min="00:00"
+            max="01:36"
+        >
+
         <button class="btn-calcular" onclick="calcular()">
             CALCULAR SAÍDA
         </button>
@@ -167,7 +176,7 @@ footer{
     </div>
 
     <footer>
-        Consulta de Jornada • Versão 2.3
+        Consulta de Jornada • Versão 3.1
     </footer>
 
 </div>
@@ -195,9 +204,8 @@ function paraHora(min){
 
 function calcular(){
 
-    const jornada = 504;
-    const intervaloPadrao = 60;
-    const heMax = 96;
+    const jornada = 504; // 8h24
+    const intervaloPadrao = 60; // 1h
 
     const entrada =
         paraMinutos(
@@ -214,6 +222,17 @@ function calcular(){
             document.getElementById('retornoAlmoco').value
         );
 
+    const heDesejada =
+        paraMinutos(
+            document.getElementById('heDesejada').value
+        );
+
+    const heLimitada =
+        Math.min(
+            heDesejada,
+            96
+        );
+
     const intervalo =
         retornoAlmoco - saidaAlmoco;
 
@@ -223,23 +242,26 @@ function calcular(){
             intervalo - intervaloPadrao
         );
 
+    /* Saída normal já considera excesso acima de 1h */
+
     const normal =
         entrada +
         jornada +
         intervaloPadrao +
         excesso;
 
-    const he =
+    const saidaComHE =
         normal +
-        heMax;
+        heLimitada;
 
-    const heIntervalo =
-        he +
+    const heMaisExcesso =
+        saidaComHE +
         excesso;
 
     document.getElementById('resultado').innerHTML = `
 
         <div class="card normal">
+
             <div class="titulo">
                 ✅ Saída Normal
             </div>
@@ -248,34 +270,48 @@ function calcular(){
                 ${paraHora(normal)}
             </div>
 
-            ${excesso > 0 ? `
+            ${
+                excesso > 0
+                ? `
                 <div class="obs">
-                    Incluído excesso de ${excesso} min no cálculo.
+                    Excesso de intervalo incluído: ${excesso} min
                 </div>
-            ` : ''}
+                `
+                : ''
+            }
+
         </div>
 
         <div class="card he">
+
             <div class="titulo">
-                🔵 HE Máxima
+                🔵 Saída com HE
             </div>
 
             <div class="valor">
-                ${paraHora(he)}
+                ${paraHora(saidaComHE)}
             </div>
+
+            <div class="obs">
+                HE escolhida: ${document.getElementById('heDesejada').value}
+            </div>
+
         </div>
 
         <div class="card total">
+
             <div class="titulo">
                 🟠 HE + Excesso
             </div>
 
             <div class="valor">
-                ${paraHora(heIntervalo)}
+                ${paraHora(heMaisExcesso)}
             </div>
+
         </div>
 
         <div class="card intervalo">
+
             <div class="titulo">
                 ⏳ Intervalo Real
             </div>
@@ -287,6 +323,7 @@ function calcular(){
             <div class="obs">
                 Excesso: ${excesso} min
             </div>
+
         </div>
 
     `;
@@ -294,10 +331,20 @@ function calcular(){
 
 function limpar(){
 
-    document.getElementById('entrada').value = '07:00';
-    document.getElementById('saidaAlmoco').value = '12:00';
-    document.getElementById('retornoAlmoco').value = '13:00';
-    document.getElementById('resultado').innerHTML = '';
+    document.getElementById('entrada').value =
+        '07:00';
+
+    document.getElementById('saidaAlmoco').value =
+        '12:00';
+
+    document.getElementById('retornoAlmoco').value =
+        '13:00';
+
+    document.getElementById('heDesejada').value =
+        '00:00';
+
+    document.getElementById('resultado').innerHTML =
+        '';
 
 }
 

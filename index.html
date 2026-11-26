@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Consulta de Jornada</title>
+<title>Consulta de Jornada v5.1</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -13,26 +14,26 @@
 }
 
 body{
-    font-family:Segoe UI, Arial, sans-serif;
-    background:#0f172a;
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:#f1f5f9;
     min-height:100vh;
     padding:20px;
 }
 
 .container{
-    max-width:520px;
+    max-width:550px;
     margin:auto;
-    background:white;
+    background:#fff;
     border-radius:24px;
     overflow:hidden;
-    box-shadow:0 15px 40px rgba(0,0,0,.35);
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
 }
 
 .header{
     background:linear-gradient(135deg,#b8860b,#ffd700);
     color:white;
-    padding:24px;
     text-align:center;
+    padding:24px;
 }
 
 .header h1{
@@ -53,30 +54,31 @@ label{
     margin-bottom:8px;
     color:#334155;
     font-weight:700;
-    font-size:18px;
+    font-size:16px;
 }
 
 input{
     width:100%;
     padding:14px;
-    margin-bottom:18px;
+    margin-bottom:16px;
     border:2px solid #cbd5e1;
-    border-radius:14px;
-    font-size:18px;
+    border-radius:18px;
+    font-size:17px;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
 }
 
 button{
     width:100%;
     border:none;
-    border-radius:14px;
+    border-radius:18px;
     padding:14px;
-    font-size:20px;
+    font-size:18px;
     font-weight:700;
     cursor:pointer;
 }
 
 .btn-calcular{
-    background:#16a34a;
+    background:linear-gradient(135deg,#16a34a,#22c55e);
     color:white;
 }
 
@@ -86,14 +88,14 @@ button{
 }
 
 .card{
-    margin-top:18px;
+    margin-top:15px;
+    padding:18px;
     color:white;
-    padding:20px;
     border-radius:18px;
 }
 
 .normal{
-    background:#22c55e;
+    background:#16a34a;
 }
 
 .he{
@@ -104,25 +106,60 @@ button{
     background:#f59e0b;
 }
 
+.limite{
+    background:#7c3aed;
+}
+
 .intervalo{
     background:#ef4444;
 }
 
+.duplo{
+    display:flex;
+    gap:12px;
+    margin-top:15px;
+}
+
+.duplo .card{
+    flex:1;
+    margin-top:0;
+}
+
 .titulo{
-    font-size:22px;
+    font-size:20px;
     font-weight:700;
 }
 
 .valor{
-    font-size:52px;
+    margin-top:10px;
+    font-size:46px;
     font-weight:800;
-    margin-top:12px;
+}
+
+.duplo .valor{
+    font-size:32px;
 }
 
 .obs{
     margin-top:8px;
     font-size:14px;
-    opacity:.95;
+}
+
+.alerta{
+    margin-top:15px;
+    padding:15px;
+    border-radius:15px;
+    color:white;
+    text-align:center;
+    font-weight:700;
+}
+
+.alerta-aviso{
+    background:#ea580c;
+}
+
+.alerta-critico{
+    background:#dc2626;
 }
 
 footer{
@@ -131,16 +168,17 @@ footer{
     color:#64748b;
     font-size:12px;
 }
-</style>
 
+</style>
 </head>
+
 <body>
 
 <div class="container">
 
     <div class="header">
-        <h1>⏱️ Consulta de Jornada</h1>
-        <p>Cálculo automático de saída</p>
+        <h1>⏱️ Consulta de ponto</h1>
+        <p>Controle rápido de jornada e horas extras</p>
     </div>
 
     <div class="content">
@@ -154,14 +192,8 @@ footer{
         <label>Retorno do almoço</label>
         <input type="time" id="retornoAlmoco" value="13:00">
 
-        <label>Hora Extra Desejada</label>
-        <input
-            type="time"
-            id="heDesejada"
-            value="00:00"
-            min="00:00"
-            max="01:36"
-        >
+        <label>HE Planejada</label>
+        <input type="time" id="heDesejada" value="00:00">
 
         <button class="btn-calcular" onclick="calcular()">
             CALCULAR SAÍDA
@@ -176,8 +208,8 @@ footer{
     </div>
 
     <footer>
-       Consulta de Jornada • Versão 3.1
-Criado por FSmaniotto
+        Consulta de Jornada • Versão 5.1<br>
+        © FSmaniotto
     </footer>
 
 </div>
@@ -189,14 +221,15 @@ function paraMinutos(hora){
     return h * 60 + m;
 }
 
-function paraHora(min){
-    min = ((min % 1440) + 1440) % 1440;
+function paraHora(minutos){
 
-    const h = Math.floor(min / 60)
+    minutos = ((minutos % 1440) + 1440) % 1440;
+
+    const h = Math.floor(minutos / 60)
         .toString()
         .padStart(2,'0');
 
-    const m = (min % 60)
+    const m = (minutos % 60)
         .toString()
         .padStart(2,'0');
 
@@ -205,61 +238,111 @@ function paraHora(min){
 
 function calcular(){
 
-    const jornada = 504; // 8h24
-    const intervaloPadrao = 60; // 1h
+    const entradaTxt =
+        document.getElementById('entrada').value;
+
+    const saidaTxt =
+        document.getElementById('saidaAlmoco').value;
+
+    const retornoTxt =
+        document.getElementById('retornoAlmoco').value;
+
+    const heTxt =
+        document.getElementById('heDesejada').value;
+
+    if(!entradaTxt || !saidaTxt || !retornoTxt || !heTxt){
+        alert('Preencha todos os horários.');
+        return;
+    }
 
     const entrada =
-        paraMinutos(
-            document.getElementById('entrada').value
-        );
+        paraMinutos(entradaTxt);
 
     const saidaAlmoco =
-        paraMinutos(
-            document.getElementById('saidaAlmoco').value
-        );
+        paraMinutos(saidaTxt);
 
     const retornoAlmoco =
-        paraMinutos(
-            document.getElementById('retornoAlmoco').value
-        );
+        paraMinutos(retornoTxt);
 
     const heDesejada =
-        paraMinutos(
-            document.getElementById('heDesejada').value
-        );
+        paraMinutos(heTxt);
 
-    const heLimitada =
-        Math.min(
-            heDesejada,
-            96
-        );
+    if(saidaAlmoco <= entrada){
+        alert('A saída para almoço deve ser posterior à entrada.');
+        return;
+    }
+
+    if(retornoAlmoco <= saidaAlmoco){
+        alert('O retorno do almoço deve ser posterior à saída para almoço.');
+        return;
+    }
 
     const intervalo =
         retornoAlmoco - saidaAlmoco;
 
+    if(intervalo < 60){
+        alert('O intervalo mínimo é de 1 hora.');
+        return;
+    }
+
+    if(heDesejada > 96){
+        alert('A HE máxima permitida é 01:36.');
+        return;
+    }
+
     const excesso =
-        Math.max(
-            0,
-            intervalo - intervaloPadrao
-        );
+        Math.max(0, intervalo - 60);
 
-    /* Saída normal já considera excesso acima de 1h */
+    const jornada = 504;
 
-    const normal =
+    const saidaNormal =
         entrada +
         jornada +
-        intervaloPadrao +
+        60 +
         excesso;
 
     const saidaComHE =
-        normal +
-        heLimitada;
+        saidaNormal +
+        heDesejada;
 
     const heMaisExcesso =
         saidaComHE +
         excesso;
 
+    const limiteSemIntervalo =
+        entrada + 360;
+
+    const agora = new Date();
+
+    const horaAtual =
+        (agora.getHours() * 60) +
+        agora.getMinutes();
+
+    const restante =
+        limiteSemIntervalo - horaAtual;
+
+    let alerta = '';
+
+    if(restante <= 0){
+
+        alerta = `
+            <div class="alerta alerta-critico">
+                🚨 LIMITE DE 6 HORAS SEM INTERVALO ATINGIDO
+            </div>
+        `;
+
+    }else if(restante <= 30){
+
+        alerta = `
+            <div class="alerta alerta-aviso">
+                ⚠️ Faltam apenas ${restante} minutos para atingir o limite de 6 horas sem intervalo.
+            </div>
+        `;
+    }
+
     document.getElementById('resultado').innerHTML = `
+
+        ${alerta}
 
         <div class="card normal">
 
@@ -268,20 +351,20 @@ function calcular(){
             </div>
 
             <div class="valor">
-                ${paraHora(normal)}
+                ${paraHora(saidaNormal)}
             </div>
 
             ${
                 excesso > 0
-                ? `
-                <div class="obs">
-                    Excesso de intervalo incluído: ${excesso} min
-                </div>
-                `
+                ? `<div class="obs">
+                    Excesso incluído: ${excesso} min
+                   </div>`
                 : ''
             }
 
         </div>
+
+        ${heDesejada > 0 ? `
 
         <div class="card he">
 
@@ -294,7 +377,7 @@ function calcular(){
             </div>
 
             <div class="obs">
-                HE escolhida: ${document.getElementById('heDesejada').value}
+                HE planejada: ${heTxt}
             </div>
 
         </div>
@@ -311,18 +394,46 @@ function calcular(){
 
         </div>
 
-        <div class="card intervalo">
+        ` : ''}
 
-            <div class="titulo">
-                ⏳ Intervalo Real
+        <div class="duplo">
+
+            <div class="card limite">
+
+                <div class="titulo">
+                    🟣 Limite
+                </div>
+
+                <div class="valor">
+                    ${paraHora(limiteSemIntervalo)}
+                </div>
+
+                ${
+                    restante > 0
+                    ? `<div class="obs">
+                        ${Math.floor(restante/60)}h ${restante%60}min restantes
+                       </div>`
+                    : `<div class="obs">
+                        Limite atingido
+                       </div>`
+                }
+
             </div>
 
-            <div class="valor">
-                ${intervalo} min
-            </div>
+            <div class="card intervalo">
 
-            <div class="obs">
-                Excesso: ${excesso} min
+                <div class="titulo">
+                    ⏳ Intervalo
+                </div>
+
+                <div class="valor">
+                    ${intervalo} min
+                </div>
+
+                <div class="obs">
+                    Excesso: ${excesso} min
+                </div>
+
             </div>
 
         </div>
@@ -332,20 +443,11 @@ function calcular(){
 
 function limpar(){
 
-    document.getElementById('entrada').value =
-        '07:00';
-
-    document.getElementById('saidaAlmoco').value =
-        '12:00';
-
-    document.getElementById('retornoAlmoco').value =
-        '13:00';
-
-    document.getElementById('heDesejada').value =
-        '00:00';
-
-    document.getElementById('resultado').innerHTML =
-        '';
+    document.getElementById('entrada').value='07:00';
+    document.getElementById('saidaAlmoco').value='12:00';
+    document.getElementById('retornoAlmoco').value='13:00';
+    document.getElementById('heDesejada').value='00:00';
+    document.getElementById('resultado').innerHTML='';
 
 }
 

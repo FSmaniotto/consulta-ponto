@@ -321,25 +321,6 @@ function calcular(){
     const restante =
         limiteSemIntervalo - horaAtual;
 
-    let alerta = '';
-
-    if(restante <= 0){
-
-        alerta = `
-            <div class="alerta alerta-critico">
-                🚨 LIMITE DE 6 HORAS SEM INTERVALO ATINGIDO
-            </div>
-        `;
-
-    }else if(restante <= 30){
-
-        alerta = `
-            <div class="alerta alerta-aviso">
-                ⚠️ Faltam apenas ${restante} minutos para atingir o limite de 6 horas sem intervalo.
-            </div>
-        `;
-    }
-
     document.getElementById('resultado').innerHTML = `
 
         ${alerta}
